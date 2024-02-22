@@ -2,17 +2,17 @@
 # Check https://github.com/thordreier/FortiGatePowerShellScripts
 ################################################################################
 param(
-	[Parameter(Position=0, Mandatory=$true)]
+	[Parameter(Position=0, Mandatory=$false)]
 	[string]
-	$CertCommonName,
+	$CertCommonName = "rsu.vpn.trustigt.com",
 	
 	[Parameter(Position=1)]
 	[string]
-	$Firewall,
+	$Firewall = "10.20.255.1:22",
 	
 	[Parameter(Position=2)]
 	[string]
-	$DirPath = 'C:\Certificates',
+	$DirPath = "C:\IGT\LetsEncrypt_Fortigate\Certificates",
 
 	[Parameter()]
 	[string]
@@ -30,6 +30,12 @@ param(
 	[string]
 	$Comment = 'Installed using PowerShell script'
 )
+
+$ErrorActionPreference="SilentlyContinue"
+Stop-Transcript | out-null
+$ErrorActionPreference = "Continue"
+
+Start-Transcript -path "C:\IGT\LetsEncrypt_Fortigate\Logs\$((get-date).ToString("yyyy-MM-dd-HHmmss")).log" -append
 
 $ErrorActionPreference = 'Stop'
 
@@ -100,3 +106,5 @@ finally
 {
     $null = Remove-SSHSession -SSHSession $sshSession
 }
+
+Stop-Transcript
